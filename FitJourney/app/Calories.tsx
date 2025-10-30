@@ -1,11 +1,13 @@
 import { StyleSheet } from 'react-native';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { Stack } from 'expo-router';
 
 export default function CaloriesTrackerScreen() {
   return (
     <ThemedView style={styles.container}>
-      <ThemedText type="title">Calories Tracker</ThemedText>
+      <Stack.Screen options={{ headerBackTitle: 'Back' }} />
+      <ThemedText type="title">Calories</ThemedText>
       <ThemedText>Your calories tracker content will go here.</ThemedText>
     </ThemedView>
   );

@@ -21,7 +21,7 @@ export default function HomeScreen() {
         onPress={() => router.push('/workout')}
       />
       <HomePageButton 
-        title="Calories Tracker"
+        title="Calories"
         onPress={() => router.push('/Calories')}
       />
       <HomePageButton 
