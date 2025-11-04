@@ -8,9 +8,8 @@ export default function BodyWeightScreen() {
   return (
     <ThemedView style={styles.container}>
       <Stack.Screen options={{ headerBackTitle: 'Back' }} />
-      <InputForm labels={['Weight (kg)', 'Height (cm)']} />
-      <ThemedText type="title">Body Weight</ThemedText>
-      <ThemedText>Your body weight content will go here.</ThemedText>
+      <ThemedText type="title" style={styles.title}>Edit Weight</ThemedText>
+      <InputForm fields={[{label: 'Weight (kg)', type: 'numeric', placeholder: 'Enter weight'}, {label: 'Date', type: 'date', placeholder: 'Select date'}]} />
     </ThemedView>
   );
 }
@@ -19,5 +18,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+  },
+  title: {
+    textAlign: 'center',
+    marginBottom: 20,
   },
 });
