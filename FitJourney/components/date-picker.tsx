@@ -2,26 +2,29 @@ import React, { useState } from 'react'
 import { Button, Platform, View, Text } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 
-export function CustomDatePicker() {
-  const [date, setDate] = useState(new Date())
-  const [show, setShow] = useState(false)
+type Props = {
+    value: Date;
+    onChange: (date: Date) => void;
+};
 
-  const onChange = (event: any, selectedDate?: Date) => {
-    const currentDate = selectedDate || date
+export function CustomDatePicker({value, onChange}: Props) {
+  const [show, setShow] = useState(false);
+
+  const handleChange = (event: any, selectedDate?: Date) => {
     setShow(Platform.OS === 'ios')
-    setDate(currentDate)
+    if(selected) onChange(selected);
   }
 
   return (
     <View>
       <Button title="Select Date" onPress={() => setShow(true)} />
-      <Text style={{ marginTop: 10 }}>Selected: {date.toLocaleDateString()}</Text>
+      <Text style={{ marginTop: 10 }}>Selected: {value.toLocaleDateString()}</Text>
       {show && (
         <DateTimePicker
-          value={date}
+          value={value}
           mode="date"
           display={Platform.OS !== 'ios' ? 'spinner' : 'default'}
-          onChange={onChange}
+          onChange={handleChange}
         />
       )}
     </View>
