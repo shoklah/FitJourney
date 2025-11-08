@@ -4,9 +4,9 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Stack, useRouter } from "expo-router";
 import { useFocusEffect } from "@react-navigation/native";
-import { readEntries, clearEntries } from "@/storage/weightStorage";
+import { readEntries, clearEntries, appendEntry } from "@/storage/weightStorage";
 import { getGoals, saveGoals, clearGoals, type Goals } from "@/storage/weightGoalsStorage";
-import { WeightGoalsForm } from "@/components/weight-goals-form";
+import { InputForm } from "@/components/input-form";
 
 export default function CurrentBodyWeight() {
   const router = useRouter();
@@ -47,13 +47,17 @@ export default function CurrentBodyWeight() {
     }
   }
 
-  const handleGoalsSubmit = async (newGoals: Goals) => {
+  const handleGoalsSubmit = async (values: Record<string, any>) => {
+    const newGoals: Goals = {
+      startingWeight: values.startingWeight,
+      goalWeight: values.goalWeight
+    };
+    
     await saveGoals(newGoals);
     setGoals(newGoals);
     
     const entries = await readEntries();
     if (entries.length === 0 && newGoals.startingWeight) {
-      const { appendEntry } = await import('@/storage/weightStorage');
       await appendEntry({
         weight: newGoals.startingWeight,
         date: new Date().toISOString()
@@ -71,8 +75,28 @@ export default function CurrentBodyWeight() {
     return (
       <ThemedView style={styles.container}>
         <Stack.Screen options={{ headerBackTitle: "Back", title: "Set Your Goals" }} />
-        <ThemedText type="title" style={styles.title}>First, let's set your goals</ThemedText>
-        <WeightGoalsForm onSubmit={handleGoalsSubmit} submitButtonText="Continue" />
+        <ThemedText type="title" style={styles.title}>
+          First, let's set your goals
+        </ThemedText>
+        <InputForm
+          fields={[
+            {
+              name: "startingWeight",
+              label: "Starting Weight (kg)",
+              type: "numeric",
+              placeholder: "Enter starting weight",
+            },
+            {
+              name: "goalWeight",
+              label: "Goal Weight (kg)",
+              type: "numeric",
+              placeholder: "Enter goal weight",
+            },
+          ]}
+          onSubmit={handleGoalsSubmit}
+          submitButtonText="Continue"
+          showCancelButton={false}
+        />
       </ThemedView>
     );
   }

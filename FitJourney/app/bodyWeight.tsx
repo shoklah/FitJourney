@@ -16,7 +16,7 @@ export default function BodyWeightScreen() {
         load();
     }, []);
 
-    const handleSubmit = async (values: { weight?: number; date?: Date }) => {
+    const handleSubmit = async (values: Record<string, any>) => {
       if (!values.weight || !values.date) return;
 
       const entry: WeightEntry = {
@@ -34,10 +34,12 @@ export default function BodyWeightScreen() {
     <ThemedView style={styles.container}>
       <Stack.Screen options={{ headerBackTitle: 'Back' }} />
       <ThemedText type="title" style={styles.title}>Edit Weight</ThemedText>
-      <InputForm fields={[
-          {label: 'Weight (kg)', type: 'numeric', placeholder: 'Enter weight'},
-          {label: 'Date', type: 'date', placeholder: 'Select date'}]}
-          onSubmit = {handleSubmit}
+      <InputForm 
+        fields={[
+          { name: 'weight', label: 'Weight (kg)', type: 'numeric', placeholder: 'Enter weight' },
+          { name: 'date', label: 'Date', type: 'date', placeholder: 'Select date' }
+        ]}
+        onSubmit={handleSubmit}
       />
       <ThemedText type="subtitle" style={styles.historyTitle}>History</ThemedText>
       <WeightHistory entries={entries} unit="kg" />

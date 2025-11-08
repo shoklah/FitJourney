@@ -4,7 +4,7 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Stack, useRouter } from 'expo-router';
 import { getGoals, saveGoals, type Goals } from '@/storage/weightGoalsStorage';
-import { WeightGoalsForm } from '@/components/weight-goals-form';
+import { InputForm } from '@/components/input-form';
 
 export default function WeightGoalScreen() {
   const router = useRouter();
@@ -22,7 +22,11 @@ export default function WeightGoalScreen() {
     setCurrentGoals(goals);
   };
 
-  const handleSubmit = async (newGoals: Goals) => {
+  const handleSubmit = async (values: Record<string, any>) => {
+    const newGoals: Goals = {
+      startingWeight: values.startingWeight,
+      goalWeight: values.goalWeight
+    };
     await saveGoals(newGoals);
     Alert.alert('Success', 'Goals updated!');
     router.back();
@@ -32,7 +36,26 @@ export default function WeightGoalScreen() {
     <ThemedView style={styles.container}>
       <Stack.Screen options={{ headerBackTitle: 'Back', title: 'Weight Goals' }} />
       <ThemedText type="title" style={styles.title}>Set Your Goals</ThemedText>
-      <WeightGoalsForm initialGoals={currentGoals} onSubmit={handleSubmit} />
+      <InputForm
+        fields={[
+          {
+            name: 'startingWeight',
+            label: 'Starting Weight (kg)',
+            type: 'numeric',
+            placeholder: 'Enter starting weight',
+            defaultValue: currentGoals.startingWeight ?? undefined
+          },
+          {
+            name: 'goalWeight',
+            label: 'Goal Weight (kg)',
+            type: 'numeric',
+            placeholder: 'Enter goal weight',
+            defaultValue: currentGoals.goalWeight ?? undefined
+          }
+        ]}
+        onSubmit={handleSubmit}
+        showCancelButton={false}
+      />
     </ThemedView>
   );
 }
