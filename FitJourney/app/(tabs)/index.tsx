@@ -26,7 +26,7 @@ export default function HomeScreen() {
       />
       <HomePageButton 
         title="Body Weight"
-        onPress={() => router.push('/bodyWeight')}
+        onPress={() => router.push('/currentWeight')}
       />
     </ParallaxScrollView>
   );
