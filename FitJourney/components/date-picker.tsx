@@ -12,7 +12,7 @@ export function CustomDatePicker({value, onChange}: Props) {
 
   const handleChange = (event: any, selectedDate?: Date) => {
     setShow(Platform.OS === 'ios')
-    if(selected) onChange(selected);
+    if(selectedDate) onChange(selectedDate);
   }
 
   return (

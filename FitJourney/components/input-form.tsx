@@ -1,40 +1,70 @@
 import React, {useState} from 'react';
-import { TextInput, type TextInputProps, Button } from 'react-native';
+import { TextInput } from 'react-native';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import DateField from '@/components/date-field';
 
-export type InputFieldProps = {
+export type InputFieldConfig = {
+  name: string;
   label: string;
   type: 'text' | 'numeric' | 'date';
   placeholder?: string;
+  defaultValue?: string | number | Date;
 };
 
 export type InputFormProps = {
-  fields: InputFieldProps[];
-  onSubmit?: (values: { weight?: number; date?: Date }) => void;
+  fields: InputFieldConfig[];
+  onSubmit?: (values: Record<string, any>) => void | Promise<void>;
   onCancel?: () => void;
+  submitButtonText?: string;
+  showCancelButton?: boolean;
 };
 
-export function InputForm({ fields, onSubmit, onCancel }: InputFormProps) {
-  const [weightText, setWeightText] = useState('');
-  const [date, setDate] = useState<Date>(new Date());
+export function InputForm({ 
+  fields, 
+  onSubmit, 
+  onCancel,
+  submitButtonText = 'Save',
+  showCancelButton = true 
+}: InputFormProps) {
+  const [values, setValues] = useState<Record<string, any>>(() => {
+    const initial: Record<string, any> = {};
+    fields.forEach(field => {
+      if (field.type === 'date') {
+        initial[field.name] = field.defaultValue instanceof Date ? field.defaultValue : new Date();
+      } else {
+        initial[field.name] = field.defaultValue?.toString() ?? '';
+      }
+    });
+    return initial;
+  });
   const [error, setError] = useState<string | null>(null);
 
-  const handleSave = () => {
-    const includesWeight = fields.some(f => f.type === 'numeric');
-    const result: { weight?: number; date?: Date } = { date };
+  const handleChange = (fieldName: string, value: any) => {
+    setValues(prev => ({ ...prev, [fieldName]: value }));
+  };
 
-    if (includesWeight) {
-      const parsed = parseFloat(weightText.replace(',', '.'));
-      if (isNaN(parsed) || parsed <= 0) {
-        setError('Please enter a valid number greater than 0.');
-        return;
+  const handleSave = async () => {
+    const result: Record<string, any> = {};
+    
+    for (const field of fields) {
+      const value = values[field.name];
+      
+      if (field.type === 'numeric') {
+        const parsed = parseFloat(value.toString().replace(',', '.'));
+        if (isNaN(parsed) || parsed <= 0) {
+          setError(`Please enter a valid ${field.label.toLowerCase()} greater than 0.`);
+          return;
+        }
+        result[field.name] = parsed;
+      } else if (field.type === 'date') {
+        result[field.name] = value;
+      } else {
+        result[field.name] = value;
       }
-      result.weight = parsed;
     }
 
     setError(null);
-    onSubmit?.(result);
+    await onSubmit?.(result);
   };
 
   const handleCancel = () => {
@@ -45,14 +75,14 @@ export function InputForm({ fields, onSubmit, onCancel }: InputFormProps) {
   return (
     <View>
       {fields.map((field, idx) => (
-        <View key={`${field.label}-${idx}`} style={styles.field}>
+        <View key={`${field.name}-${idx}`} style={styles.field}>
           {field.type !== 'date' && <Text style={styles.label}>{field.label}</Text>}
 
           {field.type === 'date' ? (
             <DateField
               label={undefined}
-              value={date}
-              onChange={setDate}
+              value={values[field.name]}
+              onChange={(date) => handleChange(field.name, date)}
               placeholder={field.placeholder ?? 'Select date'}
             />
           ) : (
@@ -61,8 +91,8 @@ export function InputForm({ fields, onSubmit, onCancel }: InputFormProps) {
               keyboardType={field.type === 'numeric' ? 'decimal-pad' : 'default'}
               inputMode={field.type === 'numeric' ? 'decimal' : 'text'}
               placeholder={field.placeholder}
-              value={weightText}
-              onChangeText={setWeightText}
+              value={values[field.name]?.toString() ?? ''}
+              onChangeText={(text) => handleChange(field.name, text)}
               returnKeyType="done"
             />
           )}
@@ -72,13 +102,15 @@ export function InputForm({ fields, onSubmit, onCancel }: InputFormProps) {
       {!!error && <Text style={styles.error}>{error}</Text>}
 
       <View style={styles.actions}>
-            <Pressable style={[styles.btn, styles.btnGhost]} onPress={handleCancel}>
-               <Text style={[styles.btnText, styles.btnGhostText]}>Cancel</Text>
-            </Pressable>
+        {showCancelButton && (
+          <Pressable style={[styles.btn, styles.btnGhost]} onPress={handleCancel}>
+            <Text style={[styles.btnText, styles.btnGhostText]}>Cancel</Text>
+          </Pressable>
+        )}
 
-            <Pressable style={[styles.btn, styles.btnPrimary]} onPress={handleSave}>
-               <Text style={[styles.btnText, styles.btnPrimaryText]}>Save</Text>
-            </Pressable>
+        <Pressable style={[styles.btn, styles.btnPrimary]} onPress={handleSave}>
+          <Text style={[styles.btnText, styles.btnPrimaryText]}>{submitButtonText}</Text>
+        </Pressable>
       </View>
     </View>
   );
