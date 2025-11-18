@@ -6,6 +6,7 @@ import { Stack } from 'expo-router';
 import { InputForm } from '@/components/input-form';
 import WeightHistory from '@/components/weight-history';
 import { appendEntry, readEntries, type WeightEntry, getFileUri } from '@/storage/weightStorage';
+import CurrentBodyWeight from './currentWeight';
 
 export default function BodyWeightScreen() {
     const [entries, setEntries] = useState<WeightEntry[]>([]);
@@ -33,14 +34,15 @@ export default function BodyWeightScreen() {
   return (
     <ThemedView style={styles.container}>
       <Stack.Screen options={{ headerBackTitle: 'Back' }} />
-      <ThemedText type="title" style={styles.title}>Edit Weight</ThemedText>
-      <InputForm 
+      <CurrentBodyWeight />
+      {/* <ThemedText type="title" style={styles.title}>Edit Weight</ThemedText> */}
+      {/* <InputForm 
         fields={[
           { name: 'weight', label: 'Weight (kg)', type: 'numeric', placeholder: 'Enter weight' },
           { name: 'date', label: 'Date', type: 'date', placeholder: 'Select date' }
         ]}
         onSubmit={handleSubmit}
-      />
+      /> */}
       <ThemedText type="subtitle" style={styles.historyTitle}>History</ThemedText>
       <WeightHistory entries={entries} unit="kg" />
     </ThemedView>

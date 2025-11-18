@@ -5,6 +5,8 @@ const GOALS_FILE_URI = FileSystem.documentDirectory + 'goals.json';
 export type Goals = {
   startingWeight: number | null;
   goalWeight: number | null;
+  goalCalories: number | null;
+  goalWorkoutsPerWeek: number | null;
 };
 
 async function ensureFile(): Promise<void> {
@@ -12,7 +14,9 @@ async function ensureFile(): Promise<void> {
   if (!info.exists) {
     const defaults: Goals = {
       startingWeight: null,
-      goalWeight: null
+      goalWeight: null,
+      goalCalories: null,
+      goalWorkoutsPerWeek: null
     };
     await FileSystem.writeAsStringAsync(
       GOALS_FILE_URI, 
@@ -41,7 +45,9 @@ export async function saveGoals(goals: Goals): Promise<void> {
 export async function clearGoals(): Promise<void> {
   const defaults: Goals = {
     startingWeight: null,
-    goalWeight: null
+    goalWeight: null,
+    goalCalories: null,
+    goalWorkoutsPerWeek: null
   };
   await FileSystem.writeAsStringAsync(
     GOALS_FILE_URI,

@@ -5,7 +5,7 @@ import { ThemedView } from "@/components/themed-view";
 import { Stack, useRouter } from "expo-router";
 import { useFocusEffect } from "@react-navigation/native";
 import { readEntries, clearEntries, appendEntry } from "@/storage/weightStorage";
-import { getGoals, saveGoals, clearGoals, type Goals } from "@/storage/weightGoalsStorage";
+import { getGoals, saveGoals, clearGoals, type Goals } from "@/storage/goalsStorage";
 import { InputForm } from "@/components/input-form";
 
 export default function CurrentBodyWeight() {
@@ -14,8 +14,9 @@ export default function CurrentBodyWeight() {
   const [previousWeight, setPreviousWeight] = useState<number | null>(null);
   const [showGoalsForm, setShowGoalsForm] = useState(false);
   const [goals, setGoals] = useState<Goals>({
-    startingWeight: null,
-    goalWeight: null
+    goalWeight: null,
+    goalCalories: null,
+    goalWorkoutsPerWeek: null,
   });
 
   useFocusEffect(
@@ -34,7 +35,7 @@ export default function CurrentBodyWeight() {
 
     setGoals(loadedGoals);
 
-    if (loadedGoals.startingWeight === null || loadedGoals.goalWeight === null) {
+    if (loadedGoals.goalWeight === null) {
       setShowGoalsForm(true);
       return;
     }
@@ -49,57 +50,58 @@ export default function CurrentBodyWeight() {
 
   const handleGoalsSubmit = async (values: Record<string, any>) => {
     const newGoals: Goals = {
-      startingWeight: values.startingWeight,
-      goalWeight: values.goalWeight
+      goalWeight: values.goalWeight || null,
+      goalCalories: values.goalCalories || null,
+      goalWorkoutsPerWeek: values.goalWorkoutsPerWeek || null,
     };
     
     await saveGoals(newGoals);
     setGoals(newGoals);
     
     const entries = await readEntries();
-    if (entries.length === 0 && newGoals.startingWeight) {
+    if (entries.length === 0 && newGoals.goalWeight !== null) {
       await appendEntry({
-        weight: newGoals.startingWeight,
+        weight: newGoals.goalWeight,
         date: new Date().toISOString()
       });
     }
     
     setShowGoalsForm(false);
-    router.push('/currentWeight');
+    router.push('/bodyWeight');
   };
 
   const weightChange =
     currentWeight && previousWeight ? currentWeight - previousWeight : 0;
 
-  if (showGoalsForm) {
-    return (
-      <ThemedView style={styles.container}>
-        <Stack.Screen options={{ headerBackTitle: "Back", title: "Set Your Goals" }} />
-        <ThemedText type="title" style={styles.title}>
-          First, let's set your goals
-        </ThemedText>
-        <InputForm
-          fields={[
-            {
-              name: "startingWeight",
-              label: "Starting Weight (kg)",
-              type: "numeric",
-              placeholder: "Enter starting weight",
-            },
-            {
-              name: "goalWeight",
-              label: "Goal Weight (kg)",
-              type: "numeric",
-              placeholder: "Enter goal weight",
-            },
-          ]}
-          onSubmit={handleGoalsSubmit}
-          submitButtonText="Continue"
-          showCancelButton={false}
-        />
-      </ThemedView>
-    );
-  }
+  // if (showGoalsForm) {
+  //   return (
+  //     <ThemedView style={styles.container}>
+  //       <Stack.Screen options={{ headerBackTitle: "Back", title: "Set Your Goals" }} />
+  //       <ThemedText type="title" style={styles.title}>
+  //         First, let's set your goals
+  //       </ThemedText>
+  //       <InputForm
+  //         fields={[
+  //           {
+  //             name: "startingWeight",
+  //             label: "Starting Weight (kg)",
+  //             type: "numeric",
+  //             placeholder: "Enter starting weight",
+  //           },
+  //           {
+  //             name: "goalWeight",
+  //             label: "Goal Weight (kg)",
+  //             type: "numeric",
+  //             placeholder: "Enter goal weight",
+  //           },
+  //         ]}
+  //         onSubmit={handleGoalsSubmit}
+  //         submitButtonText="Continue"
+  //         showCancelButton={false}
+  //       />
+  //     </ThemedView>
+  //   );
+  // }
 
   return (
     <ThemedView style={styles.container}>
@@ -118,11 +120,8 @@ export default function CurrentBodyWeight() {
       </ThemedText>
 
       <View style={styles.labelsRow}>
-        <ThemedText>Starting: {goals.startingWeight ?? '--'} kg</ThemedText>
         <ThemedText>Goal: {goals.goalWeight ?? '--'} kg</ThemedText>
       </View>
-
-      <Button title="Update" onPress={() => router.push("/bodyWeight")} />
     </ThemedView>
   );
 }
