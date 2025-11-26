@@ -5,7 +5,7 @@ import { ThemedView } from "@/components/themed-view";
 import { Stack, useRouter } from "expo-router";
 import { useFocusEffect } from "@react-navigation/native";
 import { readEntries, clearEntries, appendEntry } from "@/storage/weightStorage";
-import { getGoals, saveGoals, clearGoals, type Goals } from "@/storage/goalsStorage";
+import { getGoals, saveGoals, clearGoals, type Goals } from "@/storage/storage";
 import { InputForm } from "@/components/input-form";
 
 export default function CurrentBodyWeight() {

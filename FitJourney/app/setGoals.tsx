@@ -3,13 +3,13 @@ import React, { useState, useEffect } from "react";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { Stack, useRouter } from "expo-router";
-import { getGoals, saveGoals, type Goals } from "@/storage/goalsStorage";
+import { getGoals, saveGoals, type Data } from "@/storage/storage";
 import { InputForm } from "@/components/input-form";
 import GeneralGoalForm, { GeneralGoalConfig } from "@/components/general-goal-form";
 import { View } from "react-native/Libraries/Components/View/View";
 
 export const weightGoalConfig: GeneralGoalConfig = {
-    label: "Set your weight goal",
+    title: "Set your weight goal",
     fields: [
         {
             name: "goalWeight",
@@ -45,16 +45,19 @@ export default function SetYourGoalsScreen() {
   //   setCurrentGoals(goals);
   // };
 
-  // const handleSubmit = async (values: Record<string, any>) => {
-  //   const newGoals: Goals = {
-  //     goalWeight: values.goalWeight,
-  //     goalCalories: values.goalCalories,
-  //     goalWorkoutsPerWeek: values.goalWorkoutsPerWeek,
-  //   };
-  //   await saveGoals(newGoals);
-  //   Alert.alert("Success", "Goals updated!");
-  //   router.back();
-  // };
+  const handleSubmit = async (values: Record<string, any>) => {
+    const newGoals: Data = {
+      goals: {
+        weight: {
+          goalWeight: values.goalWeight,
+          currentWeight: values.currentWeight,
+        }
+      }
+    };
+    await saveGoals(newGoals);
+    Alert.alert("Success", "Goals updated!");
+    router.back();
+  };
 
   return (
     <ThemedView style={styles.container}>
@@ -64,8 +67,8 @@ export default function SetYourGoalsScreen() {
       <ThemedView>
         <GeneralGoalForm
           goals={weightGoalConfig}
+          onSubmit={handleSubmit}
         >
-
         </GeneralGoalForm>        
       </ThemedView>
 

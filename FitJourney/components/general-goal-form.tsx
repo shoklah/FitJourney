@@ -6,7 +6,7 @@ import { ThemedView } from "./themed-view";
 
 
 export type GeneralGoalConfig = {
-    label: string;
+    title: string;
     fields: InputFieldConfig[];
 };
 
@@ -25,7 +25,7 @@ export default function GeneralGoalForm(props: GeneralGoalFormProps) {
     return (
         <ThemedView>
             <ThemedText>
-                {props.goals.label}
+                {props.goals.title}
             </ThemedText>
             <InputForm
                 fields={props.goals.fields}

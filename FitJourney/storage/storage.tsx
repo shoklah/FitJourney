@@ -1,22 +1,28 @@
 import * as FileSystem from 'expo-file-system/legacy';
 
-const GOALS_FILE_URI = FileSystem.documentDirectory + 'goals.json';
+const GOALS_FILE_URI = FileSystem.documentDirectory + 'data.json';
 
-export type Goals = {
-  startingWeight: number | null;
-  goalWeight: number | null;
-  goalCalories: number | null;
-  goalWorkoutsPerWeek: number | null;
+export type Data = {
+  goals: {
+    weight: {
+      currentWeight: number | null;
+      goalWeight: number | null;
+      // startingWeight: number | null;
+    }
+  }
 };
 
 async function ensureFile(): Promise<void> {
   const info = await FileSystem.getInfoAsync(GOALS_FILE_URI);
   if (!info.exists) {
-    const defaults: Goals = {
-      startingWeight: null,
-      goalWeight: null,
-      goalCalories: null,
-      goalWorkoutsPerWeek: null
+    const defaults: Data = {
+      goals: {
+        weight: {
+          currentWeight: null,
+          goalWeight: null,
+          // startingWeight: null,
+        }
+      }
     };
     await FileSystem.writeAsStringAsync(
       GOALS_FILE_URI, 
@@ -26,15 +32,15 @@ async function ensureFile(): Promise<void> {
   }
 }
 
-export async function getGoals(): Promise<Goals> {
+export async function getGoals(): Promise<Data> {
   await ensureFile();
   const raw = await FileSystem.readAsStringAsync(GOALS_FILE_URI, {
     encoding: FileSystem.EncodingType.UTF8,
   });
-  return JSON.parse(raw) as Goals;
+  return JSON.parse(raw) as Data;
 }
 
-export async function saveGoals(goals: Goals): Promise<void> {
+export async function saveGoals(goals: Data): Promise<void> {
   await FileSystem.writeAsStringAsync(
     GOALS_FILE_URI,
     JSON.stringify(goals, null, 2),
@@ -43,11 +49,14 @@ export async function saveGoals(goals: Goals): Promise<void> {
 }
 
 export async function clearGoals(): Promise<void> {
-  const defaults: Goals = {
-    startingWeight: null,
-    goalWeight: null,
-    goalCalories: null,
-    goalWorkoutsPerWeek: null
+  const defaults: Data = {
+    goals: {
+      weight: {
+        currentWeight: null,
+        goalWeight: null,
+        // startingWeight: null,
+      }
+    }
   };
   await FileSystem.writeAsStringAsync(
     GOALS_FILE_URI,
