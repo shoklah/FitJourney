@@ -1,13 +1,20 @@
 import React from "react";
-import { View } from "react-native/Libraries/Components/View/View";
 import { InputForm, InputFieldConfig, InputFormProps } from "./input-form";
 import { ThemedText } from "./themed-text";
 import { ThemedView } from "./themed-view";
+import { readEntries } from "@/storage/weightStorage";
+import { saveGoals } from "@/storage/storage";
+import { useRouter } from "expo-router";
+import { Alert } from "react-native";
 
+export type GeneralGoalField = InputFieldConfig & {
+    category: 'workouts' | 'weight' | 'calories';
+    key: string;
+}
 
 export type GeneralGoalConfig = {
     title: string;
-    fields: InputFieldConfig[];
+    fields: GeneralGoalField[];
 };
 
 export type GeneralGoalFormProps = {
@@ -21,7 +28,25 @@ export type GeneralGoalFormProps = {
 
 
 export default function GeneralGoalForm(props: GeneralGoalFormProps) {
+    const router = useRouter();
+    const handleSubmit = async (values: Record<string, any>) => {
+        var data = await readEntries();
+        props.goals.fields.forEach(field => {
+            if (!data.goals[field.category]) {
+                data.goals[field.category] = {
+                    [field.key]: null,
+                };
+            }
+            data.goals[field.category][field.key] = values[field.name];
+        })
 
+        console.log("Saving goals:", data);
+    
+        await saveGoals(data);
+        Alert.alert("Success", "Goals updated!");
+        router.back();
+    };
+    
     return (
         <ThemedView>
             <ThemedText>
@@ -29,7 +54,7 @@ export default function GeneralGoalForm(props: GeneralGoalFormProps) {
             </ThemedText>
             <InputForm
                 fields={props.goals.fields}
-                onSubmit={props.onSubmit}
+                onSubmit={handleSubmit}
                 onCancel={props.onCancel}
                 submitButtonText={props.submitButtonText}
                 showCancelButton={props.showCancelButton}

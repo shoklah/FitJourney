@@ -4,10 +4,19 @@ const GOALS_FILE_URI = FileSystem.documentDirectory + 'data.json';
 
 export type Data = {
   goals: {
-    weight: {
+    weight?: {
       currentWeight: number | null;
       goalWeight: number | null;
       // startingWeight: number | null;
+    },
+    calories?: {
+      goalCalories: number | null;
+      proteinIntake: number | null;
+      fatIntake: number | null;
+      carbIntake: number | null;
+    },
+    workouts?: {
+      workoutsFrequency: number | null;
     }
   }
 };
@@ -21,6 +30,15 @@ async function ensureFile(): Promise<void> {
           currentWeight: null,
           goalWeight: null,
           // startingWeight: null,
+        },
+        calories: {
+          goalCalories: null,
+          proteinIntake: null,
+          fatIntake: null,
+          carbIntake: null,
+        },
+        workouts: {
+          workoutsFrequency: null,
         }
       }
     };
@@ -55,6 +73,15 @@ export async function clearGoals(): Promise<void> {
         currentWeight: null,
         goalWeight: null,
         // startingWeight: null,
+      },
+      calories: {
+        goalCalories: null,
+        proteinIntake: null,
+        fatIntake: null,
+        carbIntake: null,
+      },
+      workouts: {
+        workoutsFrequency: null,
       }
     }
   };

@@ -1,29 +1,46 @@
 import { StyleSheet, Alert } from "react-native";
-import React, { useState, useEffect } from "react";
-import { ThemedText } from "@/components/themed-text";
+import React from "react";
 import { ThemedView } from "@/components/themed-view";
 import { Stack, useRouter } from "expo-router";
-import { getGoals, saveGoals, type Data } from "@/storage/storage";
-import { InputForm } from "@/components/input-form";
+import { saveGoals, type Data } from "@/storage/storage";
 import GeneralGoalForm, { GeneralGoalConfig } from "@/components/general-goal-form";
-import { View } from "react-native/Libraries/Components/View/View";
 
-export const weightGoalConfig: GeneralGoalConfig = {
-    title: "Set your weight goal",
+export const calorieGoalConfig: GeneralGoalConfig = {
+    title: "Set your calories goal",
     fields: [
         {
-            name: "goalWeight",
-            label: "Goal Weight (kg)",
+            name: "goalCalories",
+            label: "Goal Calories (kcal)",
             type: "numeric",
             placeholder: " ",
+            category: 'calories',
+            key: 'goalCalories'
         },
         {
-            name: "currentWeight",
-            label: "Current Weight (kg)",
+            name: "proteinIntake",
+            label: "Protein Intake (g)",
             type: "numeric",
             placeholder: " ",
+            category: 'calories',
+            key: 'proteinIntake'
+        },
+        {
+            name: "fatIntake",
+            label: "Fat Intake (g)",
+            type: "numeric",
+            placeholder: " ",
+            category: 'calories',
+            key: 'fatIntake'
+        },
+        {
+            name: "carbIntake",
+            label: "Carbohydrate Intake (g)",
+            type: "numeric",
+            placeholder: " ",
+            category: 'calories',
+            key: 'carbIntake'
         }
-        // Add date field for target date if needed
+        
     ]
 };
 
@@ -45,29 +62,14 @@ export default function SetYourGoalsScreen() {
   //   setCurrentGoals(goals);
   // };
 
-  const handleSubmit = async (values: Record<string, any>) => {
-    const newGoals: Data = {
-      goals: {
-        weight: {
-          goalWeight: values.goalWeight,
-          currentWeight: values.currentWeight,
-        }
-      }
-    };
-    await saveGoals(newGoals);
-    Alert.alert("Success", "Goals updated!");
-    router.back();
-  };
-
   return (
     <ThemedView style={styles.container}>
       <Stack.Screen
-        options={{ headerBackTitle: "Back", title: "Weight Goals" }}
+        options={{ headerBackTitle: "Back", title: "Calorie Goals" }}
       />
       <ThemedView>
         <GeneralGoalForm
-          goals={weightGoalConfig}
-          onSubmit={handleSubmit}
+          goals={calorieGoalConfig}
         >
         </GeneralGoalForm>        
       </ThemedView>

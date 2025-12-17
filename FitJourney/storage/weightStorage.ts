@@ -1,6 +1,8 @@
 import * as FileSystem from 'expo-file-system/legacy';
+import { Data } from './storage';
 
-const FILE_URI = FileSystem.documentDirectory + 'weights.json';
+const FILE_URI = FileSystem.documentDirectory + 'data.json';
+console.log("WEIGHT STORAGE FILE URI:", FILE_URI);
 
 export type WeightEntry = {
   weight: number;
@@ -16,20 +18,22 @@ async function ensureFile(): Promise<void> {
   }
 }
 
-export async function readEntries(): Promise<WeightEntry[]> {
+export async function readEntries(): Promise<Data> {
   await ensureFile();
   const raw = await FileSystem.readAsStringAsync(FILE_URI, {
     encoding: FileSystem.EncodingType.UTF8,
   });
+  console.log("RAW WEIGHT DATA:", raw);
 
   try {
-    const arr = JSON.parse(raw) as WeightEntry[];
-    return arr.sort((a, b) => +new Date(b.date) - +new Date(a.date));
+    const arr = JSON.parse(raw) as Data;
+    console.log("PARSED WEIGHT DATA:", arr);
+    return arr;
   } catch {
     await FileSystem.writeAsStringAsync(FILE_URI, '[]', {
       encoding: FileSystem.EncodingType.UTF8,
     });
-    return [];
+    return { goals: { } };
   }
 }
 

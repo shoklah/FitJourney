@@ -18,15 +18,15 @@ export default function HomeScreen() {
       }>
       <HomePageButton 
         title="Workouts"
-        onPress={() => router.push('/workout')}
+        onPress={() => router.push('/setWorkoutsGoals')}
       />
       <HomePageButton 
         title="Calories"
-        onPress={() => router.push('/Calories')}
+        onPress={() => router.push('/setCaloriesGoals')}
       />
       <HomePageButton 
         title="Body Weight"
-        onPress={() => router.push('/setGoals')}
+        onPress={() => router.push('/setBodyWeightGoals')}
       />
     </ParallaxScrollView>
   );
