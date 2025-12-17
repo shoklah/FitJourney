@@ -4,7 +4,6 @@ import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { HomePageButton } from '@/components/homepage-button';
 import { useRouter } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
-import  SetYourGoalsScreen from '../setBodyWeightGoals';
 
 export default function HomeScreen() {
   const router = useRouter();
@@ -18,10 +17,7 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
-        <ThemedView>
-          <SetYourGoalsScreen />
-        </ThemedView>
-      {/* <HomePageButton 
+      <HomePageButton 
         title="Workouts"
         onPress={() => router.push('/setWorkoutsGoals')}
       />
@@ -32,7 +28,7 @@ export default function HomeScreen() {
       <HomePageButton 
         title="Body Weight"
         onPress={() => router.push('/setBodyWeightGoals')}
-      /> */}
+      />
     </ParallaxScrollView>
   );
 }

@@ -39,8 +39,8 @@ export const calorieGoalConfig: GeneralGoalConfig = {
             category: 'calories',
             key: 'carbIntake'
         }
-        
-    ]
+    ],
+    route: './setWorkoutsGoals'
 };
 
 

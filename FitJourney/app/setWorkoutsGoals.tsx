@@ -15,7 +15,8 @@ export const workoutsGoalConfig: GeneralGoalConfig = {
           category: 'workouts',
           key: 'workoutsFrequency'
         }
-    ]
+    ],
+    route: './home-test'
 };
 
 

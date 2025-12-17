@@ -24,7 +24,8 @@ export const weightGoalConfig: GeneralGoalConfig = {
           key: 'currentWeight'
         }
         // Add date field for target date if needed
-    ]
+    ],
+    route: './setCaloriesGoals'
 };
 
 

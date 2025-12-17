@@ -4,7 +4,7 @@ import { ThemedText } from "./themed-text";
 import { ThemedView } from "./themed-view";
 import { getGoals } from "@/storage/storage";
 import { saveGoals } from "@/storage/storage";
-import { useRouter } from "expo-router";
+import { RelativePathString, useRouter } from "expo-router";
 import { Alert } from "react-native";
 
 export type GeneralGoalField = InputFieldConfig & {
@@ -15,6 +15,7 @@ export type GeneralGoalField = InputFieldConfig & {
 export type GeneralGoalConfig = {
     title: string;
     fields: GeneralGoalField[];
+    route: RelativePathString;
 };
 
 export type GeneralGoalFormProps = {
@@ -39,12 +40,10 @@ export default function GeneralGoalForm(props: GeneralGoalFormProps) {
             }
             data.goals[field.category][field.key] = values[field.name];
         })
-
-        console.log("Saving goals:", data);
     
         await saveGoals(data);
         Alert.alert("Success", "Goals updated!");
-        router.back();
+        router.push(props.goals.route);
     };
     
     return (
