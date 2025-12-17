@@ -1,8 +1,7 @@
-import { StyleSheet, Alert } from "react-native";
+import { StyleSheet } from "react-native";
 import React from "react";
 import { ThemedView } from "@/components/themed-view";
 import { Stack, useRouter } from "expo-router";
-import { saveGoals, type Data } from "@/storage/storage";
 import GeneralGoalForm, { GeneralGoalConfig } from "@/components/general-goal-form";
 
 export const calorieGoalConfig: GeneralGoalConfig = {

@@ -2,7 +2,7 @@ import React from "react";
 import { InputForm, InputFieldConfig, InputFormProps } from "./input-form";
 import { ThemedText } from "./themed-text";
 import { ThemedView } from "./themed-view";
-import { readEntries } from "@/storage/weightStorage";
+import { getGoals } from "@/storage/storage";
 import { saveGoals } from "@/storage/storage";
 import { useRouter } from "expo-router";
 import { Alert } from "react-native";
@@ -30,7 +30,7 @@ export type GeneralGoalFormProps = {
 export default function GeneralGoalForm(props: GeneralGoalFormProps) {
     const router = useRouter();
     const handleSubmit = async (values: Record<string, any>) => {
-        var data = await readEntries();
+        var data = await getGoals();
         props.goals.fields.forEach(field => {
             if (!data.goals[field.category]) {
                 data.goals[field.category] = {
