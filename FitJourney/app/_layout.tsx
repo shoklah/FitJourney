@@ -2,15 +2,45 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
-
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect, useState } from 'react';
+import { getUserData, saveUserData } from '@/storage/userDataStorage';
+import { useRouter } from 'expo-router';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 export const unstable_settings = {
   anchor: '(tabs)',
 };
 
+SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
+  const router = useRouter();
   const colorScheme = useColorScheme();
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    async function isFirstTimeUser() {
+      try {
+        var userDataStorage = await getUserData();
+        if (userDataStorage.firstTimeUser === false) {
+          SplashScreen.hide();
+          router.push('/homePage');
+          return;
+        }
+        userDataStorage.firstTimeUser = false;
+        await saveUserData(userDataStorage);
+        SplashScreen.hide();
+        router.push('/setGoalsPage');
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setIsReady(true);
+      }
+    }
+
+    isFirstTimeUser();
+  }, []);
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>

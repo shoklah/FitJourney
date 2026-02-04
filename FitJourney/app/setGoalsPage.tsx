@@ -4,11 +4,18 @@ import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { HomePageButton } from '@/components/homepage-button';
 import { useRouter } from 'expo-router';
 import { ThemedView } from '@/components/themed-view';
-import  SetYourGoalsScreen from '../setBodyWeightGoals';
+import  SetYourGoalsScreen from './setBodyWeightGoals';
 import { getUserData } from '@/storage/userDataStorage';
 
 export default function HomeScreen() {
   const router = useRouter();
+  // const handleFirstTimeUser = async () => {
+  //   var userDataStorage = await getUserData();
+  //   if (!userDataStorage.firstTimeUser === false) {
+  //     router.push('/homePage');
+  //   }
+  // }
+
 
   return (
     <ParallaxScrollView
@@ -22,6 +29,18 @@ export default function HomeScreen() {
         <ThemedView>
           <SetYourGoalsScreen />
         </ThemedView>
+      {/* <HomePageButton 
+        title="Workouts"
+        onPress={() => router.push('/setWorkoutsGoals')}
+      />
+      <HomePageButton 
+        title="Calories"
+        onPress={() => router.push('/setCaloriesGoals')}
+      />
+      <HomePageButton 
+        title="Body Weight"
+        onPress={() => router.push('/setBodyWeightGoals')}
+      /> */}
     </ParallaxScrollView>
   );
 }
