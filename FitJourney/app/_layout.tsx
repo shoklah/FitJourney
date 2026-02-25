@@ -25,7 +25,7 @@ export default function RootLayout() {
         var userDataStorage = await getUserData();
         if (userDataStorage.firstTimeUser === false) {
           SplashScreen.hide();
-          router.push('/homePage');
+          router.push('/loginPage');
           return;
         }
         userDataStorage.firstTimeUser = false;
