@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { getUserData, saveUserData } from '@/storage/userDataStorage';
 import { useRouter } from 'expo-router';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import useAuth from '@/authentication/authenticationState';
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -18,28 +19,40 @@ export default function RootLayout() {
   const router = useRouter();
   const colorScheme = useColorScheme();
   const [isReady, setIsReady] = useState(false);
+  const user = useAuth();
 
   useEffect(() => {
-    async function isFirstTimeUser() {
-      try {
-        var userDataStorage = await getUserData();
-        if (userDataStorage.firstTimeUser === false) {
-          SplashScreen.hide();
-          router.push('/loginPage');
-          return;
-        }
-        userDataStorage.firstTimeUser = false;
-        await saveUserData(userDataStorage);
-        SplashScreen.hide();
-        router.push('/setGoalsPage');
-      } catch (e) {
-        console.warn(e);
-      } finally {
-        setIsReady(true);
-      }
+    // async function isFirstTimeUser() {
+    //   try {
+    //     var userDataStorage = await getUserData();
+    //     if (userDataStorage.firstTimeUser === false) {
+    //       SplashScreen.hide();
+    //       router.push('/loginPage');
+    //       return;
+    //     }
+    //     userDataStorage.firstTimeUser = false;
+    //     await saveUserData(userDataStorage);
+    //     SplashScreen.hide();
+    //     router.push('/setGoalsPage');
+    //   } catch (e) {
+    //     console.warn(e);
+    //   } finally {
+    //     setIsReady(true);
+    //   }
+    // }
+
+    // isFirstTimeUser();
+
+    if (user) {
+      SplashScreen.hide();
+      router.push('/setGoalsPage');
+      return;
+    } else {
+      SplashScreen.hide();
+      router.push('/loginPage');
     }
 
-    isFirstTimeUser();
+
   }, []);
 
   return (

@@ -4,10 +4,8 @@ import { ThemedText } from "./themed-text";
 import { ThemedView } from "./themed-view";
 import { useRouter } from "expo-router";
 
-export type GeneralLoginFormProps = InputFieldConfig & {
+export type GeneralLoginFormProps = InputFormProps & {
     title: string;
-    fields: InputFieldConfig[];
-    onSubmit?: InputFormProps["onSubmit"];
 };
 
 

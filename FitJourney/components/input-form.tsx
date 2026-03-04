@@ -6,7 +6,7 @@ import DateField from '@/components/date-field';
 export type InputFieldConfig = {
   name: string;
   label: string;
-  type: 'text' | 'numeric' | 'date';
+  type: 'text' | 'numeric' | 'date' | 'password';
   placeholder?: string;
   defaultValue?: string | number | Date;
 };
