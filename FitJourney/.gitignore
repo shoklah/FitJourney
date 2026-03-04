@@ -38,9 +38,14 @@ yarn-error.*
 
 app-example
 
-# generated native folders
-/ios
+# generated native folders  
 /android
+
+# iOS - ignore generated/downloaded files but keep project structure
+ios/Pods/
+ios/build/
+ios/DerivedData/
+# Note: Keep Podfile and Podfile.lock committed for team consistency
 
 # firebase
 GoogleService-Info.plist
