@@ -1,16 +1,18 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect, useState } from 'react';
-import { getUserData, saveUserData } from '@/storage/userDataStorage';
-import { useRouter } from 'expo-router';
-import { useColorScheme } from '@/hooks/use-color-scheme';
-import useAuth from '@/authentication/authenticationState';
+import useAuth from "@/authentication/authenticationState";
+import { useColorScheme } from "@/hooks/use-color-scheme";
+import {
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
+import { Stack, useRouter } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
+import { useEffect, useState } from "react";
+import "react-native-reanimated";
 
 export const unstable_settings = {
-  anchor: '(tabs)',
+  anchor: "(tabs)",
 };
 
 SplashScreen.preventAutoHideAsync();
@@ -20,55 +22,40 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [isReady, setIsReady] = useState(false);
   const { user, initializing } = useAuth();
-  
 
   useEffect(() => {
-    // async function isFirstTimeUser() {
-    //   try {
-    //     var userDataStorage = await getUserData();
-    //     if (userDataStorage.firstTimeUser === false) {
-    //       SplashScreen.hide();
-    //       router.push('/loginPage');
-    //       return;
-    //     }
-    //     userDataStorage.firstTimeUser = false;
-    //     await saveUserData(userDataStorage);
-    //     SplashScreen.hide();
-    //     router.push('/setGoalsPage');
-    //   } catch (e) {
-    //     console.warn(e);
-    //   } finally {
-    //     setIsReady(true);
-    //   }
-    // }
-
-    // isFirstTimeUser();
-    async function isFirstTimeUser() {
-      if (initializing ) {
+    async function isLoggedIn() {
+      if (initializing) {
         return null;
       }
 
       if (!user) {
         SplashScreen.hide();
-        router.navigate('/loginPage');
+        router.navigate("/loginPage");
         return;
       }
 
       if (user) {
         SplashScreen.hide();
-        router.navigate('/setGoalsPage');
+        router.navigate("/setGoalsPage");
         return;
       }
     }
-    
-    isFirstTimeUser();
-  }, [user]);
+
+    isLoggedIn();
+  }, [user, initializing, router]);
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false, headerBackTitle: 'Back' }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+        <Stack.Screen
+          name="(tabs)"
+          options={{ headerShown: false, headerBackTitle: "Back" }}
+        />
+        <Stack.Screen
+          name="modal"
+          options={{ presentation: "modal", title: "Modal" }}
+        />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
