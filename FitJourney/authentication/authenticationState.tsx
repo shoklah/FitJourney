@@ -17,7 +17,5 @@ export default function useAuth() {
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  if (initializing || !user) return null;
-
-  return ( user );
+  return { user, initializing };
 }

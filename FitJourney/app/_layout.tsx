@@ -19,7 +19,8 @@ export default function RootLayout() {
   const router = useRouter();
   const colorScheme = useColorScheme();
   const [isReady, setIsReady] = useState(false);
-  const user = useAuth();
+  const { user, initializing } = useAuth();
+  
 
   useEffect(() => {
     // async function isFirstTimeUser() {
@@ -42,18 +43,26 @@ export default function RootLayout() {
     // }
 
     // isFirstTimeUser();
+    async function isFirstTimeUser() {
+      if (initializing ) {
+        return null;
+      }
 
-    if (user) {
-      SplashScreen.hide();
-      router.push('/setGoalsPage');
-      return;
-    } else {
-      SplashScreen.hide();
-      router.push('/loginPage');
+      if (!user) {
+        SplashScreen.hide();
+        router.navigate('/loginPage');
+        return;
+      }
+
+      if (user) {
+        SplashScreen.hide();
+        router.navigate('/setGoalsPage');
+        return;
+      }
     }
-
-
-  }, []);
+    
+    isFirstTimeUser();
+  }, [user]);
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
