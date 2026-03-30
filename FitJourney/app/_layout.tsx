@@ -30,12 +30,14 @@ export default function RootLayout() {
       }
 
       if (user) {
+        console.log("User is logged in:", user.email);
         SplashScreen.hide();
         router.navigate("/loginPage");
         return;
       }
 
       if (!user) {
+        console.log("No user is logged in");
         SplashScreen.hide();
         router.navigate("/setGoalsPage");
         return;

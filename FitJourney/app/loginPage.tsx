@@ -13,8 +13,10 @@ export default function LoginScreen() {
 
   const handleLogin = async (values: Record<string, any>) => {
     const { username, password } = values;
+    console.log("Attempting login with:", username);
     try {
       await signInWithEmailAndPassword(getAuth(), username, password);
+      console.log("Login successful for:", username);
     } catch (error) {
       console.error("Login error:", error);
     }
