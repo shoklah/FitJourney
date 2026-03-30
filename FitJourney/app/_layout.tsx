@@ -29,13 +29,13 @@ export default function RootLayout() {
         return null;
       }
 
-      if (!user) {
+      if (user) {
         SplashScreen.hide();
         router.navigate("/loginPage");
         return;
       }
 
-      if (user) {
+      if (!user) {
         SplashScreen.hide();
         router.navigate("/setGoalsPage");
         return;
