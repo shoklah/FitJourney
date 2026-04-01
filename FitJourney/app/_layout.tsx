@@ -32,14 +32,14 @@ export default function RootLayout() {
       if (user) {
         console.log("User is logged in:", user.email);
         SplashScreen.hide();
-        router.navigate("/loginPage");
+        router.navigate("/setGoalsPage");
         return;
       }
 
       if (!user) {
         console.log("No user is logged in");
         SplashScreen.hide();
-        router.navigate("/setGoalsPage");
+        router.navigate("/loginPage");
         return;
       }
     }
