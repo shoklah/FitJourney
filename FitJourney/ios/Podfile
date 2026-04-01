@@ -22,6 +22,8 @@ static_frameworks = [
   'GoogleUtilities',
   'RecaptchaInterop',
   'FirebaseCoreInternal',
+  'FirebaseFirestore',
+  'FirebaseFirestoreInternal',
   'FirebaseInstallations',
   'GoogleDataTransport',
   'nanopb',
@@ -58,6 +60,8 @@ target 'FitJourney' do
   pod 'FirebaseCore'
   pod 'FirebaseCoreExtension'
   pod 'FirebaseCoreInternal'
+  pod 'FirebaseFirestore'
+  pod 'FirebaseFirestoreInternal'
   pod 'GoogleUtilities'
   pod 'RecaptchaInterop'
   pod 'nanopb'

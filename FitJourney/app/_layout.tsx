@@ -1,5 +1,6 @@
 import useAuth from "@/authentication/authenticationState";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { isFirstTimeUser } from "@/storage/userData";
 import {
   DarkTheme,
   DefaultTheme,
@@ -30,9 +31,14 @@ export default function RootLayout() {
       }
 
       if (user) {
-        console.log("User is logged in:", user.email);
+        console.log("User is logged in:", user.uid);
         SplashScreen.hide();
-        router.navigate("/setGoalsPage");
+        const isFirstTime = await isFirstTimeUser(user.uid);
+        if (isFirstTime) {
+          router.navigate("/setGoalsPage");
+        } else {
+          router.navigate("/homePage");
+        }
         return;
       }
 
